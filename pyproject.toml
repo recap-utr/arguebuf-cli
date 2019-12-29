@@ -1,8 +1,11 @@
 [tool.poetry]
-name = "Argument-Graph-Utils"
-version = "1.0.0"
+name = "ReCAP-Utils"
+version = "0.1.0"
 description = ""
 authors = ["Mirko Lenz <info@mirko-lenz.de>"]
+
+[tool.poetry.scripts]
+recap-utils = "recap_utils.app:cli"
 
 [tool.poetry.dependencies]
 python = "^3.7"
@@ -10,6 +13,7 @@ recap-argument-graph = "^0.1.0"
 click = "^7.0"
 tomlkit = "^0.5.8"
 recap-argument-graph-translator = "^0.1.1"
+click-pathlib = "^2019.12.28"
 
 [tool.poetry.dev-dependencies]
 pytest = "^3.0"
