@@ -8,6 +8,17 @@ from dataclasses import field, dataclass
 
 
 def rm_tree(pth: Path) -> None:
+    """Remove the directory and all its contents.
+
+    Args:
+        pth: Path to be removed
+
+    Returns:
+        Nothing.
+
+    Examples:
+        >>> rm_tree(Path("data/out"))
+    """
     for child in pth.iterdir():
         if child.is_file():
             child.unlink()
@@ -18,11 +29,22 @@ def rm_tree(pth: Path) -> None:
 
 @dataclass
 class PathPair:
+    """A pair of paths for modification of files."""
+
     source: Path
     target: Path
 
 
 def pair_label(path_pair: t.Optional[PathPair]) -> str:
+    """Generate a string for representing a path pair.
+
+    Args:
+        path_pair: The item that should be represented.
+
+    Returns:
+        A label for use in UI contexts.
+    """
+
     if path_pair:
         return path_pair.source.name
     return ""
@@ -62,11 +84,21 @@ def cli() -> None:
 @click.argument(
     "folder_out", type=click_pathlib.Path(exists=True, file_okay=False),
 )
-@click.option("--source-lang", required=True)
-@click.option("--target-lang", required=True)
-@click.option("--auth-key", required=True)
-@click.option("--clean/--no-clean", default=True)
-@click.option("--parallel/--sequential", default=True)
+@click.option(
+    "--source-lang", required=True, help="Lowercase code, i.e. en for English."
+)
+@click.option(
+    "--target-lang", required=True, help="Lowercase code, i.e. en for English."
+)
+@click.option("--auth-key", required=True, help="DeepL Pro API key.")
+@click.option(
+    "--clean/--no-clean", default=False, help="Remove all contents of FOLDER_OUT."
+)
+@click.option(
+    "--parallel/--sequential",
+    default=True,
+    help="Send multiple requests to DeepL at the same time.",
+)
 def translate(
     folder_in: Path,
     folder_out: Path,
@@ -101,7 +133,9 @@ def translate(
 @click.argument(
     "folder_out", type=click_pathlib.Path(exists=True, file_okay=False),
 )
-@click.option("--clean/--no-clean", default=True)
+@click.option(
+    "--clean/--no-clean", default=False, help="Remove all contents of FOLDER_OUT."
+)
 def render(folder_in: Path, folder_out: Path, clean: bool) -> None:
     if clean:
         rm_tree(folder_out)
