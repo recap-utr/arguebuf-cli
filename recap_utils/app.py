@@ -22,6 +22,12 @@ class PathPair:
     target: Path
 
 
+def pair_label(path_pair: t.Optional[PathPair]) -> str:
+    if path_pair:
+        return path_pair.source.name
+    return ""
+
+
 def path_pairs(
     folder_in: Path,
     folder_out: Path,
@@ -51,10 +57,10 @@ def cli() -> None:
 
 @cli.command()
 @click.argument(
-    "folder_in", type=click_pathlib.Path(exists=True),
+    "folder_in", type=click_pathlib.Path(exists=True, file_okay=False),
 )
 @click.argument(
-    "folder_out", type=click_pathlib.Path(exists=True),
+    "folder_out", type=click_pathlib.Path(exists=True, file_okay=False),
 )
 @click.option("--source-lang", required=True)
 @click.option("--target-lang", required=True)
@@ -76,23 +82,24 @@ def translate(
     paths = path_pairs(folder_in, folder_out)
     translator = agt.Translator(auth_key, source_lang, target_lang)
 
-    total_files = len(paths)
-    print(f"Total files: {total_files}")
-
-    for i, path in enumerate(paths):
-        print(f"Translating '{path.source}' ({i}/{total_files}).")
-
-        graph = ag.Graph.open(path.source)
-        translator.translate_graph(graph, parallel)
-        graph.save(path.target)
+    with click.progressbar(
+        paths,
+        label=f"Translating {folder_in}",
+        item_show_func=pair_label,
+        show_pos=True,
+    ) as bar:
+        for path in bar:
+            graph = ag.Graph.open(path.source)
+            translator.translate_graph(graph, parallel)
+            graph.save(path.target)
 
 
 @cli.command()
 @click.argument(
-    "folder_in", type=click_pathlib.Path(exists=True),
+    "folder_in", type=click_pathlib.Path(exists=True, file_okay=False),
 )
 @click.argument(
-    "folder_out", type=click_pathlib.Path(exists=True),
+    "folder_out", type=click_pathlib.Path(exists=True, file_okay=False),
 )
 @click.option("--clean/--no-clean", default=True)
 def render(folder_in: Path, folder_out: Path, clean: bool) -> None:
@@ -101,14 +108,12 @@ def render(folder_in: Path, folder_out: Path, clean: bool) -> None:
 
     paths = path_pairs(folder_in, folder_out, suffix_out=".pdf")
 
-    total_files = len(paths)
-    print(f"Total files: {total_files}")
-
-    for i, path in enumerate(paths):
-        print(f"Rendering '{path.source}' ({i}/{total_files}).")
-
-        graph = ag.Graph.open(path.source)
-        graph.render(path.target)
+    with click.progressbar(
+        paths, label=f"Rendering {folder_in}", item_show_func=pair_label, show_pos=True,
+    ) as bar:
+        for path in bar:
+            graph = ag.Graph.open(path.source)
+            graph.render(path.target)
 
 
 if __name__ == "__main__":
