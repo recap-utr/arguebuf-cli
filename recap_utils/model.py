@@ -16,7 +16,7 @@ class PathPair:
     def create(
         cls, folder_in: Path, folder_out: Path, suffix_in: str, suffix_out: str,
     ) -> t.List[PathPair]:
-        files_in = folder_in.rglob(f"*{suffix_in}")
+        files_in = sorted(folder_in.rglob(f"*{suffix_in}"))
         files_out = []
 
         for file_in in files_in:
@@ -27,8 +27,7 @@ class PathPair:
             files_out.append(file_out)
 
         return [
-            cls(file_in, file_out.with_suffix(suffix_out))
-            for file_in, file_out in zip(files_in, files_out)
+            cls(file_in, file_out) for file_in, file_out in zip(files_in, files_out)
         ]
 
     @staticmethod
@@ -43,5 +42,5 @@ class PathPair:
         """
 
         if path_pair:
-            return str(path_pair.source)
+            return path_pair.source.name
         return ""

@@ -36,6 +36,7 @@ def cli() -> None:
     default=True,
     help="Send multiple requests to DeepL at the same time.",
 )
+@click.option("--start", default=1, help="Start index.")
 def translate(
     folder_in: Path,
     folder_out: Path,
@@ -44,6 +45,7 @@ def translate(
     auth_key: str,
     clean: bool,
     parallel: bool,
+    start: int,
 ) -> None:
     if clean:
         shutil.rmtree(folder_out)
@@ -53,7 +55,7 @@ def translate(
     translator = agt.Translator(auth_key, source_lang, target_lang)
 
     with click.progressbar(
-        paths, label="Translating…", item_show_func=model.PathPair.label, show_pos=True,
+        paths[start - 1 :], item_show_func=model.PathPair.label, show_pos=True,
     ) as bar:
         for path in bar:
             graph = ag.Graph.open(path.source)
@@ -71,7 +73,8 @@ def translate(
 @click.option(
     "--clean/--no-clean", default=False, help="Remove all contents of FOLDER_OUT."
 )
-def render(folder_in: Path, folder_out: Path, clean: bool) -> None:
+@click.option("--start", default=1, help="Start index.")
+def render(folder_in: Path, folder_out: Path, clean: bool, start: int) -> None:
     if clean:
         shutil.rmtree(folder_out)
         folder_out.mkdir()
@@ -79,7 +82,7 @@ def render(folder_in: Path, folder_out: Path, clean: bool) -> None:
     paths = model.PathPair.create(folder_in, folder_out, ".json", ".pdf")
 
     with click.progressbar(
-        paths, label="Rendering…", item_show_func=model.PathPair.label, show_pos=True,
+        paths[start - 1 :], item_show_func=model.PathPair.label, show_pos=True,
     ) as bar:
         for path_pair in bar:
             if not path_pair.target.exists():

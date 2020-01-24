@@ -8,7 +8,7 @@ import recap_deepl_pro as dl
 from recap_utils import model
 
 
-@click.group("txt")
+@click.group("text")
 def cli() -> None:
     pass
 
@@ -31,6 +31,7 @@ def cli() -> None:
     "--clean/--no-clean", default=False, help="Remove all contents of FOLDER_OUT."
 )
 @click.option("--suffix", default=".txt")
+@click.option("--start", default=1, help="Start index.")
 def translate(
     folder_in: Path,
     folder_out: Path,
@@ -39,6 +40,7 @@ def translate(
     auth_key: str,
     clean: bool,
     suffix: str,
+    start: int,
 ) -> None:
     if clean:
         shutil.rmtree(folder_out)
@@ -50,7 +52,7 @@ def translate(
     )
 
     with click.progressbar(
-        paths, label="Translating…", item_show_func=model.PathPair.label, show_pos=True,
+        paths[start - 1 :], item_show_func=model.PathPair.label, show_pos=True,
     ) as bar:
         for path_pair in bar:
             if not path_pair.target.exists():
