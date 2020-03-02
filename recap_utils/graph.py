@@ -88,3 +88,39 @@ def render(folder_in: Path, folder_out: Path, clean: bool, start: int) -> None:
             if not path_pair.target.exists():
                 graph = ag.Graph.open(path_pair.source)
                 graph.render(path_pair.target)
+
+
+@cli.command()
+@click.argument(
+    "folder_in", type=click_pathlib.Path(exists=True, file_okay=False),
+)
+@click.argument(
+    "folder_out", type=click_pathlib.Path(exists=True, file_okay=False),
+)
+@click.option(
+    "--format",
+    required=True,
+    type=click.Choice(["aif", "ova"]),
+    help="Desired output format of the json files.",
+)
+@click.option(
+    "--clean/--no-clean", default=False, help="Remove all contents of FOLDER_OUT."
+)
+@click.option("--start", default=1, help="Start index.")
+def convert(
+    folder_in: Path, folder_out: Path, format: str, clean: bool, start: int,
+) -> None:
+    if clean:
+        shutil.rmtree(folder_out)
+        folder_out.mkdir()
+
+    paths = model.PathPair.create(folder_in, folder_out, ".json", ".json")
+
+    with click.progressbar(
+        paths[start - 1 :], item_show_func=model.PathPair.label, show_pos=True,
+    ) as bar:
+        for path_pair in bar:
+            if not path_pair.target.exists():
+                graph = ag.Graph.open(path_pair.source)
+                graph.category = ag.GraphCategory(format)
+                graph.save(path_pair.target)
