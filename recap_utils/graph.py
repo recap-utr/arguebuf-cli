@@ -71,10 +71,17 @@ def translate(
     "folder_out", type=click_pathlib.Path(exists=True, file_okay=False),
 )
 @click.option(
+    "--node-label",
+    default="plain_text",
+    help="Node attribute that should be used as a label.",
+)
+@click.option(
     "--clean/--no-clean", default=False, help="Remove all contents of FOLDER_OUT."
 )
 @click.option("--start", default=1, help="Start index.")
-def render(folder_in: Path, folder_out: Path, clean: bool, start: int) -> None:
+def render(
+    folder_in: Path, folder_out: Path, node_label: str, clean: bool, start: int
+) -> None:
     if clean:
         shutil.rmtree(folder_out)
         folder_out.mkdir()
@@ -87,7 +94,7 @@ def render(folder_in: Path, folder_out: Path, clean: bool, start: int) -> None:
         for path_pair in bar:
             if not path_pair.target.exists():
                 graph = ag.Graph.open(path_pair.source)
-                graph.render(path_pair.target)
+                graph.render(path_pair.target, node_label=node_label)
 
 
 @cli.command()
