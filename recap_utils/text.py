@@ -3,7 +3,7 @@ from pathlib import Path
 
 import click
 import click_pathlib
-import recap_deepl_pro as dl
+import deepl_pro as dl
 
 from recap_utils import model
 

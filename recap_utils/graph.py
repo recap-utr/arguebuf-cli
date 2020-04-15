@@ -4,9 +4,8 @@ from pathlib import Path
 import click
 import click_pathlib
 import recap_argument_graph as ag
-import recap_argument_graph_translator as agt
 
-from . import model
+from . import model, graph_translator
 
 
 @click.group("graph")
@@ -52,7 +51,7 @@ def translate(
         folder_out.mkdir()
 
     paths = model.PathPair.create(folder_in, folder_out, ".json", ".json")
-    translator = agt.Translator(auth_key, source_lang, target_lang)
+    translator = graph_translator.Translator(auth_key, source_lang, target_lang)
 
     with click.progressbar(
         paths[start - 1 :], item_show_func=model.PathPair.label, show_pos=True,
