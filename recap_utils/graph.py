@@ -106,7 +106,7 @@ def render(
 @click.option(
     "--input-format",
     required=True,
-    type=click.Choice(["json", "ann"]),
+    type=click.Choice([".json", ".ann"]),
     help="Input format of the files.",
 )
 @click.option(
@@ -141,3 +141,32 @@ def convert(
                 graph = ag.Graph.open(path_pair.source)
                 graph.category = ag.GraphCategory(output_format)
                 graph.save(path_pair.target)
+
+
+@cli.command()
+@click.argument(
+    "folder_in", type=click_pathlib.Path(exists=True, file_okay=False),
+)
+@click.option(
+    "--input-format",
+    required=True,
+    type=click.Choice([".json", ".ann"]),
+    help="Input format of the files.",
+)
+def count(folder_in: Path, input_format: str):
+    files = sorted(folder_in.rglob(f"*{input_format}"))
+
+    inodes = 0
+    snodes = 0
+    edges = 0
+
+    with click.progressbar(
+        files, item_show_func=lambda path: path.name if path else "", show_pos=True,
+    ) as bar:
+        for file in bar:
+            graph = ag.Graph.open(file)
+            inodes += len(graph.inodes)
+            snodes += len(graph.snodes)
+            edges += len(graph.edges)
+
+    click.echo(f"I-nodes: {inodes}\nS-nodes: {snodes}\nEdges: {edges}")
