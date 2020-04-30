@@ -104,23 +104,34 @@ def render(
     "folder_out", type=click_pathlib.Path(exists=True, file_okay=False),
 )
 @click.option(
-    "--format",
+    "--input-format",
+    required=True,
+    type=click.Choice(["json", "ann"]),
+    help="Input format of the files.",
+)
+@click.option(
+    "--output-format",
     required=True,
     type=click.Choice(["aif", "ova"]),
-    help="Desired output format of the json files.",
+    help="Output format of the json files.",
 )
 @click.option(
     "--clean/--no-clean", default=False, help="Remove all contents of FOLDER_OUT."
 )
 @click.option("--start", default=1, help="Start index.")
 def convert(
-    folder_in: Path, folder_out: Path, format: str, clean: bool, start: int,
+    folder_in: Path,
+    folder_out: Path,
+    input_format: str,
+    output_format: str,
+    clean: bool,
+    start: int,
 ) -> None:
     if clean:
         shutil.rmtree(folder_out)
         folder_out.mkdir()
 
-    paths = model.PathPair.create(folder_in, folder_out, ".json", ".json")
+    paths = model.PathPair.create(folder_in, folder_out, input_format, ".json")
 
     with click.progressbar(
         paths[start - 1 :], item_show_func=model.PathPair.label, show_pos=True,
@@ -128,5 +139,5 @@ def convert(
         for path_pair in bar:
             if not path_pair.target.exists():
                 graph = ag.Graph.open(path_pair.source)
-                graph.category = ag.GraphCategory(format)
+                graph.category = ag.GraphCategory(output_format)
                 graph.save(path_pair.target)
