@@ -170,4 +170,6 @@ def count(folder_in: Path, input_format: str):
             snodes += len(graph.snodes)
             edges += len(graph.edges)
 
-    click.echo(f"Graphs:{graphs}\nI-nodes: {inodes}\nS-nodes: {snodes}\nEdges: {edges}")
+    click.echo(
+        f"Graphs: {graphs}\nI-nodes: {inodes}\nS-nodes: {snodes}\nEdges: {edges}"
+    )
