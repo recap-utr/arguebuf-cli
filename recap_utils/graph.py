@@ -156,6 +156,7 @@ def convert(
 def count(folder_in: Path, input_format: str):
     files = sorted(folder_in.rglob(f"*{input_format}"))
 
+    graphs = len(files)
     inodes = 0
     snodes = 0
     edges = 0
@@ -169,4 +170,4 @@ def count(folder_in: Path, input_format: str):
             snodes += len(graph.snodes)
             edges += len(graph.edges)
 
-    click.echo(f"I-nodes: {inodes}\nS-nodes: {snodes}\nEdges: {edges}")
+    click.echo(f"Graphs:{graphs}\nI-nodes: {inodes}\nS-nodes: {snodes}\nEdges: {edges}")
