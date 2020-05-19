@@ -162,7 +162,7 @@ def count(folder_in: Path, input_format: str):
 
     total_graphs = len(graphs)
     total_inodes = sum(inodes)
-    total_snodes = sum(inodes)
+    total_snodes = sum(snodes)
     total_edges = sum(edges)
 
     click.echo(
