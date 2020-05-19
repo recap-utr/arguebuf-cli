@@ -155,21 +155,32 @@ def convert(
 )
 def count(folder_in: Path, input_format: str):
     files = sorted(folder_in.rglob(f"*{input_format}"))
+    graphs = [ag.Graph.open(file) for file in files]
+    inodes = [len(graph.inodes) for graph in graphs]
+    snodes = [len(graph.snodes) for graph in graphs]
+    edges = [len(graph.edges) for graph in graphs]
 
-    graphs = len(files)
-    inodes = 0
-    snodes = 0
-    edges = 0
-
-    with click.progressbar(
-        files, item_show_func=lambda path: path.name if path else "", show_pos=True,
-    ) as bar:
-        for file in bar:
-            graph = ag.Graph.open(file)
-            inodes += len(graph.inodes)
-            snodes += len(graph.snodes)
-            edges += len(graph.edges)
+    total_graphs = len(graphs)
+    total_inodes = sum(inodes)
+    total_snodes = sum(inodes)
+    total_edges = sum(edges)
 
     click.echo(
-        f"Graphs: {graphs}\nI-nodes: {inodes}\nS-nodes: {snodes}\nEdges: {edges}"
+        f"""Total Graphs: {total_graphs}
+
+Total I-nodes: {total_inodes}
+Total S-nodes: {total_snodes}
+Total Edges: {total_edges}
+
+I-nodes per Graph: {total_inodes / total_graphs}
+S-nodes per Graph: {total_snodes / total_graphs}
+Edges per Graph: {total_edges / total_graphs}
+
+Max. I-nodes: {max(inodes)}
+Max. S-nodes: {max(snodes)}
+Max. Edges: {max(edges)}
+
+Min. I-nodes: {min(inodes)}
+Min. S-nodes: {min(snodes)}
+Min. Edges: {min(edges)}"""
     )
