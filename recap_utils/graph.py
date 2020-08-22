@@ -78,14 +78,32 @@ def translate(
     "--clean/--no-clean", default=False, help="Remove all contents of FOLDER_OUT."
 )
 @click.option("--start", default=1, help="Start index.")
+@click.option(
+    "--input-format",
+    required=True,
+    type=click.Choice([".json", ".ann"]),
+    help="Input format of the files.",
+)
+@click.option(
+    "--output-format",
+    required=True,
+    type=click.Choice([".pdf", ".png", ".jpg"]),
+    help="Output format of the images.",
+)
 def render(
-    folder_in: Path, folder_out: Path, node_label: str, clean: bool, start: int
+    folder_in: Path,
+    folder_out: Path,
+    node_label: str,
+    clean: bool,
+    start: int,
+    input_format: str,
+    output_format: str,
 ) -> None:
     if clean:
         shutil.rmtree(folder_out)
         folder_out.mkdir()
 
-    paths = model.PathPair.create(folder_in, folder_out, ".json", ".pdf")
+    paths = model.PathPair.create(folder_in, folder_out, input_format, output_format)
 
     with click.progressbar(
         paths[start - 1 :], item_show_func=model.PathPair.label, show_pos=True,
