@@ -85,6 +85,11 @@ def translate(
 @click.option(
     "--clean/--no-clean", default=False, help="Remove all contents of FOLDER_OUT."
 )
+@click.option(
+    "--overwrite/--no-overwrite",
+    default=False,
+    help="Overwrite existing graph renderings.",
+)
 @click.option("--start", default=1, help="Start index.")
 @click.option(
     "--input-format",
@@ -103,6 +108,7 @@ def render(
     folder_out: Path,
     node_label: t.Iterable[str],
     clean: bool,
+    overwrite: bool,
     start: int,
     input_format: str,
     output_format: str,
@@ -119,7 +125,7 @@ def render(
         show_pos=True,
     ) as bar:
         for path_pair in bar:
-            if not path_pair.target.exists():
+            if overwrite or not path_pair.target.exists():
                 graph = ag.Graph.from_file(path_pair.source)
                 graph.render(path_pair.target, node_labels=node_label)
 

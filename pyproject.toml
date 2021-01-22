@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ReCAP-Utils"
-version = "0.1.12"
+version = "0.1.13"
 description = ""
 authors = ["Mirko Lenz <info@mirko-lenz.de>"]
 
@@ -9,7 +9,7 @@ recap-utils = "recap_utils.app:cli"
 
 [tool.poetry.dependencies]
 python = "^3.8"
-recap-argument-graph = "^0.1.36"
+recap-argument-graph = "^0.1.37"
 click = "^7.0"
 tomlkit = "^0.7"
 click-pathlib = "^2020.3"
