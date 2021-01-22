@@ -5,7 +5,7 @@ import click
 import click_pathlib
 import recap_argument_graph as ag
 
-from . import model, graph_translator
+from . import graph_translator, model
 
 
 @click.group("graph")
@@ -15,10 +15,12 @@ def cli() -> None:
 
 @cli.command()
 @click.argument(
-    "folder_in", type=click_pathlib.Path(exists=True, file_okay=False),
+    "folder_in",
+    type=click_pathlib.Path(exists=True, file_okay=False),
 )
 @click.argument(
-    "folder_out", type=click_pathlib.Path(exists=True, file_okay=False),
+    "folder_out",
+    type=click_pathlib.Path(exists=True, file_okay=False),
 )
 @click.option(
     "--source-lang", required=True, help="Lowercase code, i.e. en for English."
@@ -54,7 +56,9 @@ def translate(
     translator = graph_translator.Translator(auth_key, source_lang, target_lang)
 
     with click.progressbar(
-        paths[start - 1 :], item_show_func=model.PathPair.label, show_pos=True,
+        paths[start - 1 :],
+        item_show_func=model.PathPair.label,
+        show_pos=True,
     ) as bar:
         for path in bar:
             graph = ag.Graph.open(path.source)
@@ -64,15 +68,18 @@ def translate(
 
 @cli.command()
 @click.argument(
-    "folder_in", type=click_pathlib.Path(exists=True, file_okay=False),
+    "folder_in",
+    type=click_pathlib.Path(exists=True, file_okay=False),
 )
 @click.argument(
-    "folder_out", type=click_pathlib.Path(exists=True, file_okay=False),
+    "folder_out",
+    type=click_pathlib.Path(exists=True, file_okay=False),
 )
 @click.option(
     "--node-label",
-    default="plain_text",
-    help="Node attribute that should be used as a label.",
+    default=["plain_text"],
+    multiple=True,
+    help="Node attribute(s) that should be used as a label.",
 )
 @click.option(
     "--clean/--no-clean", default=False, help="Remove all contents of FOLDER_OUT."
@@ -93,7 +100,7 @@ def translate(
 def render(
     folder_in: Path,
     folder_out: Path,
-    node_label: str,
+    node_label: t.Iterable[str],
     clean: bool,
     start: int,
     input_format: str,
@@ -106,20 +113,24 @@ def render(
     paths = model.PathPair.create(folder_in, folder_out, input_format, output_format)
 
     with click.progressbar(
-        paths[start - 1 :], item_show_func=model.PathPair.label, show_pos=True,
+        paths[start - 1 :],
+        item_show_func=model.PathPair.label,
+        show_pos=True,
     ) as bar:
         for path_pair in bar:
             if not path_pair.target.exists():
-                graph = ag.Graph.open(path_pair.source)
-                graph.render(path_pair.target, node_label=node_label)
+                graph = ag.Graph.from_file(path_pair.source)
+                graph.render(path_pair.target, node_labels=node_label)
 
 
 @cli.command()
 @click.argument(
-    "folder_in", type=click_pathlib.Path(exists=True, file_okay=False),
+    "folder_in",
+    type=click_pathlib.Path(exists=True, file_okay=False),
 )
 @click.argument(
-    "folder_out", type=click_pathlib.Path(exists=True, file_okay=False),
+    "folder_out",
+    type=click_pathlib.Path(exists=True, file_okay=False),
 )
 @click.option(
     "--input-format",
@@ -152,7 +163,9 @@ def convert(
     paths = model.PathPair.create(folder_in, folder_out, input_format, ".json")
 
     with click.progressbar(
-        paths[start - 1 :], item_show_func=model.PathPair.label, show_pos=True,
+        paths[start - 1 :],
+        item_show_func=model.PathPair.label,
+        show_pos=True,
     ) as bar:
         for path_pair in bar:
             if not path_pair.target.exists():
@@ -163,7 +176,8 @@ def convert(
 
 @cli.command()
 @click.argument(
-    "folder_in", type=click_pathlib.Path(exists=True, file_okay=False),
+    "folder_in",
+    type=click_pathlib.Path(exists=True, file_okay=False),
 )
 @click.option(
     "--input-format",

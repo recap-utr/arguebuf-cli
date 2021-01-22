@@ -8,11 +8,11 @@ authors = ["Mirko Lenz <info@mirko-lenz.de>"]
 recap-utils = "recap_utils.app:cli"
 
 [tool.poetry.dependencies]
-python = "^3.7"
-recap-argument-graph = "^0.1.0"
+python = "^3.8"
+recap-argument-graph = "^0.1.36"
 click = "^7.0"
-tomlkit = "^0.5.8"
-click-pathlib = "^2019.12.28"
+tomlkit = "^0.7"
+click-pathlib = "^2020.3"
 deepl-pro = "^0.1.4"
 
 [tool.poetry.dev-dependencies]
