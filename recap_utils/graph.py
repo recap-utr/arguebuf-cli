@@ -82,6 +82,8 @@ def translate(
     multiple=True,
     help="Node attribute(s) that should be used as a label.",
 )
+@click.option("--nodesep", default=None)
+@click.option("--ranksep", default=None)
 @click.option(
     "--clean/--no-clean", default=False, help="Remove all contents of FOLDER_OUT."
 )
@@ -107,6 +109,8 @@ def render(
     folder_in: Path,
     folder_out: Path,
     node_label: t.Iterable[str],
+    nodesep: str,
+    ranksep: str,
     clean: bool,
     overwrite: bool,
     start: int,
@@ -127,7 +131,12 @@ def render(
         for path_pair in bar:
             if overwrite or not path_pair.target.exists():
                 graph = ag.Graph.from_file(path_pair.source)
-                graph.render(path_pair.target, node_labels=node_label)
+                graph.render(
+                    path_pair.target,
+                    node_labels=node_label,
+                    nodesep=nodesep,
+                    ranksep=ranksep,
+                )
 
 
 @cli.command()
