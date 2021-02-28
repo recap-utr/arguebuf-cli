@@ -82,12 +82,12 @@ def translate(
     multiple=True,
     help="Node attribute(s) that should be used as a label.",
 )
-@click.option("--nodesep", default=None)
-@click.option("--ranksep", default=None)
-@click.option("--node-wrap-col", default=None)
-@click.option("--node-margin", default=None)
+@click.option("--nodesep", default=None, type=float)
+@click.option("--ranksep", default=None, type=float)
+@click.option("--node-wrap-col", default=None, type=int)
+# @click.option("--node-margin", default=None)
 @click.option("--font-name", default=None)
-@click.option("--font-size", default=None)
+@click.option("--font-size", default=None, type=int)
 @click.option(
     "--clean/--no-clean", default=False, help="Remove all contents of FOLDER_OUT."
 )
@@ -114,7 +114,7 @@ def render(
     nodesep: float,
     ranksep: float,
     node_wrap_col: int,
-    node_margin: t.Tuple[float, float],
+    # node_margin: t.Tuple[float, float],
     font_name: str,
     font_size: float,
     clean: bool,
