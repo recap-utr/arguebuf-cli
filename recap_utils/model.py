@@ -20,7 +20,7 @@ class PathPair:
         suffix_in: t.Optional[str],
         suffix_out: t.Optional[str],
     ) -> t.List[PathPair]:
-        if path_in.is_file() and path_out.is_file():
+        if path_in.is_file():
             return [cls(path_in, path_out)]
 
         elif path_in.is_dir() and path_out.is_dir() and suffix_in and suffix_out:

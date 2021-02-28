@@ -99,13 +99,11 @@ def translate(
 @click.option("--start", default=1, help="Start index.")
 @click.option(
     "--input-format",
-    required=True,
     type=click.Choice([".json", ".ann"]),
     help="Input format of the files.",
 )
 @click.option(
     "--output-format",
-    required=True,
     type=click.Choice([".pdf", ".png", ".jpg"]),
     help="Output format of the images.",
 )
