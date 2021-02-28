@@ -17,11 +17,11 @@ def cli() -> None:
 @cli.command()
 @click.argument(
     "folder_in",
-    type=click_pathlib.Path(exists=True, file_okay=False),
+    type=click_pathlib.Path(),
 )
 @click.argument(
     "folder_out",
-    type=click_pathlib.Path(exists=True, file_okay=False),
+    type=click_pathlib.Path(),
 )
 @click.option(
     "--source-lang", required=True, help="Lowercase code, i.e. en for English."
@@ -70,11 +70,11 @@ def translate(
 @cli.command()
 @click.argument(
     "folder_in",
-    type=click_pathlib.Path(exists=True, file_okay=False),
+    type=click_pathlib.Path(),
 )
 @click.argument(
     "folder_out",
-    type=click_pathlib.Path(exists=True, file_okay=False),
+    type=click_pathlib.Path(),
 )
 @click.option(
     "--node-label",
@@ -84,6 +84,10 @@ def translate(
 )
 @click.option("--nodesep", default=None)
 @click.option("--ranksep", default=None)
+@click.option("--node-wrap-col", default=None)
+@click.option("--node-margin", default=None)
+@click.option("--font-name", default=None)
+@click.option("--font-size", default=None)
 @click.option(
     "--clean/--no-clean", default=False, help="Remove all contents of FOLDER_OUT."
 )
@@ -109,8 +113,12 @@ def render(
     folder_in: Path,
     folder_out: Path,
     node_label: t.Iterable[str],
-    nodesep: str,
-    ranksep: str,
+    nodesep: float,
+    ranksep: float,
+    node_wrap_col: int,
+    node_margin: t.Tuple[float, float],
+    font_name: str,
+    font_size: float,
     clean: bool,
     overwrite: bool,
     start: int,
@@ -136,17 +144,21 @@ def render(
                     node_labels=node_label,
                     nodesep=nodesep,
                     ranksep=ranksep,
+                    node_wrap_col=node_wrap_col,
+                    node_margin=node_margin,
+                    font_name=font_name,
+                    font_size=font_size,
                 )
 
 
 @cli.command()
 @click.argument(
     "folder_in",
-    type=click_pathlib.Path(exists=True, file_okay=False),
+    type=click_pathlib.Path(),
 )
 @click.argument(
     "folder_out",
-    type=click_pathlib.Path(exists=True, file_okay=False),
+    type=click_pathlib.Path(),
 )
 @click.option(
     "--input-format",
@@ -193,7 +205,7 @@ def convert(
 @cli.command()
 @click.argument(
     "folder_in",
-    type=click_pathlib.Path(exists=True, file_okay=False),
+    type=click_pathlib.Path(),
 )
 @click.option(
     "--input-format",

@@ -15,10 +15,12 @@ def cli() -> None:
 
 @cli.command()
 @click.argument(
-    "folder_in", type=click_pathlib.Path(exists=True, file_okay=False),
+    "folder_in",
+    type=click_pathlib.Path(),
 )
 @click.argument(
-    "folder_out", type=click_pathlib.Path(exists=True, file_okay=False),
+    "folder_out",
+    type=click_pathlib.Path(),
 )
 @click.option(
     "--source-lang", required=True, help="Lowercase code, i.e. en for English."
@@ -52,7 +54,9 @@ def translate(
     )
 
     with click.progressbar(
-        paths[start - 1 :], item_show_func=model.PathPair.label, show_pos=True,
+        paths[start - 1 :],
+        item_show_func=model.PathPair.label,
+        show_pos=True,
     ) as bar:
         for path_pair in bar:
             if not path_pair.target.exists():

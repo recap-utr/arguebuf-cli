@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+import typing as t
 from dataclasses import dataclass
 from pathlib import Path
-import typing as t
 
 
 @dataclass
@@ -14,21 +14,31 @@ class PathPair:
 
     @classmethod
     def create(
-        cls, folder_in: Path, folder_out: Path, suffix_in: str, suffix_out: str,
+        cls,
+        path_in: Path,
+        path_out: Path,
+        suffix_in: t.Optional[str],
+        suffix_out: t.Optional[str],
     ) -> t.List[PathPair]:
-        files_in = sorted(folder_in.rglob(f"*{suffix_in}"))
-        files_out = []
+        if path_in.is_file() and path_out.is_file():
+            return [cls(path_in, path_out)]
 
-        for file_in in files_in:
-            file_out = folder_out / file_in.relative_to(folder_in)
-            file_out = file_out.with_suffix(suffix_out)
-            file_out.parent.mkdir(parents=True, exist_ok=True)
+        elif path_in.is_dir() and path_out.is_dir() and suffix_in and suffix_out:
+            files_in = sorted(path_in.rglob(f"*{suffix_in}"))
+            files_out = []
 
-            files_out.append(file_out)
+            for file_in in files_in:
+                file_out = path_out / file_in.relative_to(path_in)
+                file_out = file_out.with_suffix(suffix_out)
+                file_out.parent.mkdir(parents=True, exist_ok=True)
 
-        return [
-            cls(file_in, file_out) for file_in, file_out in zip(files_in, files_out)
-        ]
+                files_out.append(file_out)
+
+            return [
+                cls(file_in, file_out) for file_in, file_out in zip(files_in, files_out)
+            ]
+
+        raise ValueError("Wrong combination of parameters given.")
 
     @staticmethod
     def label(path_pair: t.Optional[PathPair]) -> str:
