@@ -143,7 +143,7 @@ def render(
                     nodesep=nodesep,
                     ranksep=ranksep,
                     node_wrap_col=node_wrap_col,
-                    node_margin=node_margin,
+                    # node_margin=node_margin,
                     font_name=font_name,
                     font_size=font_size,
                 )
