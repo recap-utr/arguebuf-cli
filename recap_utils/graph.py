@@ -107,6 +107,11 @@ def translate(
     type=click.Choice([".pdf", ".png", ".jpg"]),
     help="Output format of the images.",
 )
+@click.option(
+    "--input-filter",
+    multiple=True,
+    help="Specify (multiple) filenames (without extension) that shall be processed",
+)
 def render(
     folder_in: Path,
     folder_out: Path,
@@ -122,6 +127,7 @@ def render(
     start: int,
     input_format: str,
     output_format: str,
+    input_filter: t.Iterable[str],
 ) -> None:
     if clean:
         shutil.rmtree(folder_out)
@@ -135,7 +141,9 @@ def render(
         show_pos=True,
     ) as bar:
         for path_pair in bar:
-            if overwrite or not path_pair.target.exists():
+            if path_pair.source.stem in input_filter and (
+                overwrite or not path_pair.target.exists()
+            ):
                 graph = ag.Graph.from_file(path_pair.source)
                 graph.render(
                     path_pair.target,
