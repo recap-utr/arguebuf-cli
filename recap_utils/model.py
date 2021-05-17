@@ -19,9 +19,12 @@ class PathPair:
         path_out: Path,
         suffix_in: t.Optional[str],
         suffix_out: t.Optional[str],
+        input_filter: t.Iterable[str] = tuple(),
     ) -> t.List[PathPair]:
+        pairs = []
+
         if path_in.is_file():
-            return [cls(path_in, path_out)]
+            pairs.append(cls(path_in, path_out))
 
         elif path_in.is_dir() and path_out.is_dir() and suffix_in and suffix_out:
             files_in = sorted(path_in.rglob(f"*{suffix_in}"))
@@ -34,11 +37,17 @@ class PathPair:
 
                 files_out.append(file_out)
 
-            return [
+            pairs.extend(
                 cls(file_in, file_out) for file_in, file_out in zip(files_in, files_out)
-            ]
+            )
 
-        raise ValueError("Wrong combination of parameters given.")
+        else:
+            raise ValueError("Wrong combination of parameters given.")
+
+        if input_filter:
+            pairs = [pair for pair in pairs if pair.source.stem in input_filter]
+
+        return pairs
 
     @staticmethod
     def label(path_pair: t.Optional[PathPair]) -> str:

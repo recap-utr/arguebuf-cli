@@ -133,7 +133,9 @@ def render(
         shutil.rmtree(folder_out)
         folder_out.mkdir()
 
-    paths = model.PathPair.create(folder_in, folder_out, input_format, output_format)
+    paths = model.PathPair.create(
+        folder_in, folder_out, input_format, output_format, input_filter
+    )
 
     with click.progressbar(
         paths[start - 1 :],
@@ -141,9 +143,7 @@ def render(
         show_pos=True,
     ) as bar:
         for path_pair in bar:
-            if path_pair.source.stem in input_filter and (
-                overwrite or not path_pair.target.exists()
-            ):
+            if overwrite or not path_pair.target.exists():
                 graph = ag.Graph.from_file(path_pair.source)
                 graph.render(
                     path_pair.target,
