@@ -17,22 +17,28 @@ class PathPair:
         cls,
         path_in: Path,
         path_out: Path,
-        suffix_in: t.Optional[str],
-        suffix_out: t.Optional[str],
-        input_filter: t.Iterable[str] = tuple(),
+        input_glob: t.Optional[str],
+        output_suffix: t.Optional[str],
     ) -> t.List[PathPair]:
         pairs = []
 
         if path_in.is_file():
-            pairs.append(cls(path_in, path_out))
+            if path_out.suffix:
+                pairs.append(cls(path_in, path_out))
+            elif output_suffix:
+                pairs.append(cls(path_in, path_out.with_suffix(output_suffix)))
+            else:
+                raise ValueError(
+                    "File given as input. Please also provide a file as output."
+                )
 
-        elif path_in.is_dir() and path_out.is_dir() and suffix_in and suffix_out:
-            files_in = sorted(path_in.rglob(f"*{suffix_in}"))
+        elif path_in.is_dir() and path_out.is_dir() and input_glob and output_suffix:
+            files_in = sorted(path_in.glob(input_glob))
             files_out = []
 
             for file_in in files_in:
                 file_out = path_out / file_in.relative_to(path_in)
-                file_out = file_out.with_suffix(suffix_out)
+                file_out = file_out.with_suffix(output_suffix)
                 file_out.parent.mkdir(parents=True, exist_ok=True)
 
                 files_out.append(file_out)
@@ -42,10 +48,9 @@ class PathPair:
             )
 
         else:
-            raise ValueError("Wrong combination of parameters given.")
-
-        if input_filter:
-            pairs = [pair for pair in pairs if pair.source.stem in input_filter]
+            raise ValueError(
+                "Folder given as input. Please also provide a folder as output together with a shell globbing pattern and an output suffix."
+            )
 
         return pairs
 

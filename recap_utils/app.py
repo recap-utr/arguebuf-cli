@@ -1,15 +1,10 @@
-import click
+import typer
 
-from . import graph, text
+from recap_utils import graph, text
 
-
-@click.group()
-def cli():
-    pass
-
-
-cli.add_command(graph.cli)
-cli.add_command(text.cli)
+cli = typer.Typer()
+cli.add_typer(graph.cli, name="graph")
+cli.add_typer(text.cli, name="text")
 
 if __name__ == "__main__":
     cli()

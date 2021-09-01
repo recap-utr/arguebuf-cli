@@ -1,8 +1,8 @@
 import logging
 import typing as t
 
+import arguebuf as ag
 import deepl_pro as dl
-import recap_argument_graph as ag
 
 log = logging.getLogger(__name__)
 
@@ -29,17 +29,16 @@ class Translator:
         )
 
     def translate_graph(self, graph: ag.Graph, parallel: bool = False) -> None:
-        graph.text = self.trans_plain.translate_text(graph.text)
+        # TODO: Use parallel request
+        for resource in graph.resources.values():
+            resource.text = self.trans_plain.translate_text(resource.plain_text)
 
-        if graph.highlighted_text:
-            graph.highlighted_text = self.trans_xml.translate_text(
-                graph.highlighted_text.replace("<br>", "\n")
-            ).replace("\n", "<br>")
+        # TODO: Texts in the node anchors
 
-        texts = [inode.text for inode in graph.inodes]
+        texts = [inode.plain_text for inode in graph.atom_nodes.values()]
         translations = self.trans_plain.translate_texts(texts, parallel=parallel)
 
-        for inode, translation in zip(graph.inodes, translations):
+        for inode, translation in zip(graph.atom_nodes.values(), translations):
             inode.text = translation
 
     def translate_graphs(

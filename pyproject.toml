@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ReCAP-Utils"
-version = "0.1.19"
+version = "0.2.0"
 description = ""
 authors = ["Mirko Lenz <info@mirko-lenz.de>"]
 
@@ -9,11 +9,11 @@ recap-utils = "recap_utils.app:cli"
 
 [tool.poetry.dependencies]
 python = "^3.8"
-recap-argument-graph = "^0.1.37"
-click = "^7.0"
 tomlkit = "^0.7"
-click-pathlib = "^2020.3"
 deepl-pro = "^0.1.4"
+arg-services = "^0.1.18"
+arguebuf = "^0.2.0"
+typer = "^0.3.2"
 
 [build-system]
 requires = ["poetry>=0.12"]
