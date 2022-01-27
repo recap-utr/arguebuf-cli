@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ReCAP-Utils"
-version = "0.2.0"
+version = "0.2.1"
 description = ""
 authors = ["Mirko Lenz <info@mirko-lenz.de>"]
 
@@ -12,7 +12,7 @@ python = "^3.8"
 tomlkit = "^0.7"
 deepl-pro = "^0.1.4"
 arg-services = "^0.1.18"
-arguebuf = "^0.2.0"
+arguebuf = "^0.2.3"
 typer = "^0.3.2"
 
 [build-system]
