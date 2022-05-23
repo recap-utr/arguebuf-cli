@@ -3,6 +3,7 @@ version = "0.2.1"
 name = "Arguebuf CLI"
 description = ""
 authors = ["Mirko Lenz <info@mirko-lenz.de>"]
+license = "MIT"
 
 [tool.poetry.scripts]
 arguebuf = "arguebuf_cli.app:cli"
