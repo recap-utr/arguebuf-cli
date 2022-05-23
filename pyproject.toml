@@ -9,10 +9,8 @@ arguebuf = "arguebuf_cli.app:cli"
 
 [tool.poetry.dependencies]
 python = "^3.8"
-tomlkit = "^0.7"
 deepl-pro = "^0.1.4"
-arg-services = "^0.1.18"
-arguebuf = "^0.2.3"
+arguebuf = "^0.3.0"
 typer = "^0.3.2"
 
 [build-system]
