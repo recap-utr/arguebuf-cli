@@ -1,9 +1,12 @@
 [tool.poetry]
-version = "0.2.1"
-name = "Arguebuf CLI"
+name = "arguebuf-cli"
+version = "0.3.0"
 description = ""
 authors = ["Mirko Lenz <info@mirko-lenz.de>"]
 license = "MIT"
+readme = "README.md"
+homepage = "https://recap.uni-trier.de"
+repository = "https://github.com/recap-utr/arguebuf-cli"
 
 [tool.poetry.scripts]
 arguebuf = "arguebuf_cli.app:cli"
@@ -15,5 +18,5 @@ arguebuf = "^0.3.0"
 typer = "^0.3.2"
 
 [build-system]
-requires = ["poetry>=0.12"]
-build-backend = "poetry.masonry.api"
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
