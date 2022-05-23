@@ -5,7 +5,7 @@ from pathlib import Path
 import deepl_pro as dl
 import typer
 
-from recap_utils import model
+from arguebuf_cli import model
 
 cli = typer.Typer()
 

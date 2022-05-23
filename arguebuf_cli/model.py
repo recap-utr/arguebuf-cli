@@ -65,6 +65,4 @@ class PathPair:
             A label for use in UI contexts.
         """
 
-        if path_pair:
-            return path_pair.source.name
-        return ""
+        return path_pair.source.name if path_pair else ""

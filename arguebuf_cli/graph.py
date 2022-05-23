@@ -6,7 +6,7 @@ from pathlib import Path
 import arguebuf as ag
 import typer
 
-from recap_utils import graph_translator, model
+from arguebuf_cli import graph_translator, model
 
 cli = typer.Typer()
 

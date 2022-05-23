@@ -1,6 +1,6 @@
 import typer
 
-from recap_utils import graph, text
+from arguebuf_cli import graph, text
 
 cli = typer.Typer()
 cli.add_typer(graph.cli, name="graph")

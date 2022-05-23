@@ -1,11 +1,11 @@
 [tool.poetry]
-name = "ReCAP-Utils"
 version = "0.2.1"
+name = "Arguebuf CLI"
 description = ""
 authors = ["Mirko Lenz <info@mirko-lenz.de>"]
 
 [tool.poetry.scripts]
-recap-utils = "recap_utils.app:cli"
+arguebuf = "arguebuf_cli.app:cli"
 
 [tool.poetry.dependencies]
 python = "^3.8"
