@@ -111,9 +111,19 @@ def convert(
     clean: bool = False,
     overwrite: bool = False,
     start: int = 1,
+    text_folder: t.Optional[Path] = None,
+    text_glob: t.Optional[str] = None,
 ) -> None:
     if not output_folder:
         output_folder = input_folder
+
+    texts: dict[str, str] = {}
+
+    if text_folder and text_glob:
+        for file in text_folder.glob(text_glob):
+            with file.open("r") as f:
+                filename = str(file.relative_to(text_folder).with_suffix(""))
+                texts[filename] = f.read()
 
     if clean:
         shutil.rmtree(output_folder)
@@ -130,6 +140,13 @@ def convert(
         for path_pair in bar:
             if overwrite or not path_pair.target.exists():
                 graph = ag.Graph.from_file(path_pair.source)
+                relative_source = str(
+                    path_pair.source.relative_to(input_folder).with_suffix("")
+                )
+
+                if text := texts.get(relative_source):
+                    graph.add_resource(ag.Resource(text))
+
                 graph.to_file(path_pair.target, output_format)
 
 
