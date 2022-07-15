@@ -53,7 +53,7 @@ def render(
     input_glob: str,
     output_folder: t.Optional[Path] = None,
     output_format: str = ".pdf",
-    strip_snodes: bool = False,
+    strip_scheme_nodes: bool = False,
     nodesep: t.Optional[float] = None,
     ranksep: t.Optional[float] = None,
     node_wrap_col: t.Optional[int] = None,
@@ -85,8 +85,8 @@ def render(
             if overwrite or not path_pair.target.exists():
                 g = ag.Graph.from_file(path_pair.source)
 
-                if strip_snodes:
-                    g.strip_snodes()
+                if strip_scheme_nodes:
+                    g.strip_scheme_nodes()
 
                 gv = g.to_gv(
                     format=output_format.replace(".", ""),
