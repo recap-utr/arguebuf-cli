@@ -1,6 +1,5 @@
 import shutil
 import typing as t
-from enum import Enum
 from pathlib import Path
 
 import arguebuf as ag
@@ -34,6 +33,7 @@ def translate(
 
     path_pairs = model.PathPair.create(input_folder, output_folder, input_glob, ".json")
     translator = graph_translator.Translator(auth_key, source_lang, target_lang)
+    bar: t.Iterable[model.PathPair]
 
     with typer.progressbar(
         path_pairs[start - 1 :],
@@ -41,8 +41,6 @@ def translate(
         show_pos=True,
     ) as bar:
         for path_pair in bar:
-            path_pair = t.cast(model.PathPair, path_pair)
-
             if overwrite or not path_pair.target.exists():
                 graph = ag.Graph.from_file(path_pair.source)
                 translator.translate_graph(graph, parallel)
@@ -76,6 +74,7 @@ def render(
     paths = model.PathPair.create(
         input_folder, output_folder, input_glob, output_format
     )
+    bar: t.Iterable[model.PathPair]
 
     with typer.progressbar(
         paths[start - 1 :],
@@ -83,8 +82,6 @@ def render(
         show_pos=True,
     ) as bar:
         for path_pair in bar:
-            path_pair = t.cast(model.PathPair, path_pair)
-
             if overwrite or not path_pair.target.exists():
                 g = ag.Graph.from_file(path_pair.source)
 
@@ -123,6 +120,7 @@ def convert(
         output_folder.mkdir()
 
     paths = model.PathPair.create(input_folder, output_folder, input_glob, ".json")
+    bar: t.Iterable[model.PathPair]
 
     with typer.progressbar(
         paths[start - 1 :],
@@ -130,8 +128,6 @@ def convert(
         show_pos=True,
     ) as bar:
         for path_pair in bar:
-            path_pair = t.cast(model.PathPair, path_pair)
-
             if overwrite or not path_pair.target.exists():
                 graph = ag.Graph.from_file(path_pair.source)
                 graph.to_file(path_pair.target, output_format)

@@ -36,6 +36,7 @@ def translate(
     translator = dl.Translator(
         auth_key, dl.Language(source_lang), dl.Language(target_lang)
     )
+    bar: t.Iterable[model.PathPair]
 
     with typer.progressbar(
         paths[start - 1 :],
@@ -43,8 +44,6 @@ def translate(
         show_pos=True,
     ) as bar:
         for path_pair in bar:
-            path_pair = t.cast(model.PathPair, path_pair)
-
             if overwrite or not path_pair.target.exists():
                 with path_pair.source.open("r") as file:
                     source_text = file.read()

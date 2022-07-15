@@ -20,7 +20,7 @@ class PathPair:
         input_glob: t.Optional[str],
         output_suffix: t.Optional[str],
     ) -> t.List[PathPair]:
-        pairs = []
+        pairs: list[PathPair] = []
 
         if path_in.is_file():
             if path_out.suffix:
@@ -34,7 +34,7 @@ class PathPair:
 
         elif path_in.is_dir() and path_out.is_dir() and input_glob and output_suffix:
             files_in = sorted(path_in.glob(input_glob))
-            files_out = []
+            files_out: list[Path] = []
 
             for file_in in files_in:
                 file_out = path_out / file_in.relative_to(path_in)
