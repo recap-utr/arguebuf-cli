@@ -15,7 +15,7 @@ arguebuf = "arguebuf_cli.app:cli"
 python = "^3.8"
 deepl-pro = "^0.1.4"
 arguebuf = "^1.0.3"
-typer = "^0.6.1"
+typer = { version = "^0.6.1", extras = ["all"] }
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
