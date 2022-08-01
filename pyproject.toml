@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "arguebuf-cli"
-version = "1.1.0"
+version = "1.1.1"
 description = ""
 authors = ["Mirko Lenz <info@mirko-lenz.de>"]
 license = "MIT"
