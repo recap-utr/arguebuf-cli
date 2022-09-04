@@ -32,7 +32,9 @@ class PathPair:
                     "File given as input. Please also provide a file as output."
                 )
 
-        elif path_in.is_dir() and path_out.is_dir() and input_glob and output_suffix:
+        elif path_in.is_dir() and input_glob and output_suffix:
+            path_out.mkdir(parents=True, exist_ok=True)
+
             files_in = sorted(path_in.glob(input_glob))
             files_out: list[Path] = []
 
