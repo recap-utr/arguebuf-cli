@@ -47,6 +47,18 @@ def translate(
                 graph.to_file(path_pair.target, output_format)
 
 
+def _strip_node_labels(node: ag.Node) -> str:
+    label: str = ""
+
+    for char in node.label:
+        if char.isspace():
+            label += char
+        else:
+            label += "–"
+
+    return label
+
+
 @cli.command()
 def render(
     input_folder: Path,
@@ -54,6 +66,7 @@ def render(
     output_folder: t.Optional[Path] = None,
     output_format: str = ".pdf",
     strip_scheme_nodes: bool = False,
+    strip_node_labels: bool = False,
     nodesep: t.Optional[float] = None,
     ranksep: t.Optional[float] = None,
     node_wrap_col: t.Optional[int] = None,
@@ -98,6 +111,8 @@ def render(
                     else None,
                     font_name=font_name,
                     font_size=font_size,
+                    atom_label=_strip_node_labels if strip_node_labels else None,
+                    scheme_label=_strip_node_labels if strip_node_labels else None,
                 )
                 ag.render(gv, path_pair.target)
 
