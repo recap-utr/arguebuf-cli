@@ -4,6 +4,7 @@ from pathlib import Path
 
 import arguebuf as ag
 import typer
+from arguebuf.models.edge import EdgeStyle
 
 from arguebuf_cli import graph_translator, model
 
@@ -67,6 +68,7 @@ def render(
     output_format: str = ".pdf",
     strip_scheme_nodes: bool = False,
     strip_node_labels: bool = False,
+    edge_style: t.Optional[EdgeStyle] = None,
     nodesep: t.Optional[float] = None,
     ranksep: t.Optional[float] = None,
     node_wrap_col: t.Optional[int] = None,
@@ -113,6 +115,7 @@ def render(
                     font_size=font_size,
                     atom_label=_strip_node_labels if strip_node_labels else None,
                     scheme_label=_strip_node_labels if strip_node_labels else None,
+                    edge_style=edge_style,
                 )
                 ag.render(gv, path_pair.target)
 
