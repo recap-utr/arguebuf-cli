@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "arguebuf-cli"
-version = "1.2.0"
+version = "1.2.1"
 description = "Command line interface for interacting with argument graphs."
 authors = ["Mirko Lenz <info@mirko-lenz.de>"]
 license = "MIT"
