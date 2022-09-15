@@ -1,11 +1,9 @@
 # Arguebuf CLI
 
-This project aims at providing some tools to simplify dealing with structured argument graphs.
-Among others, it is possible to convert graphs between different formats, translate them, and render images using graphviz.
-The library can easily be installed using pip:
+This package is now obsolete as its functionality has been merged with the main Arguebuf library for Python.
+To migrate, do the following:
 
-`pip install arguebuf-cli`
-
-Afterwards, you can execute it by calling `arguebuf`, for example:
-
-`arguebuf --help`
+```sh
+pip uninstall arguebuf-cli
+pip install arguebuf[cli]
+```
